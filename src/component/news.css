@@ -1,0 +1,46 @@
+.news {
+    width: 90%;
+    margin: 1rem auto;
+    border: 1px solid black;
+    background-color: rgb(120, 120, 100, 0.3);
+    height: 15rem;
+    display: flex;
+    justify-content: space-evenly;
+}
+.left {
+    width: 60%;
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.title {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+#link {
+    color: blue;
+    text-transform: lowercase;
+}
+.info {
+    margin-top: 1rem
+}
+.right {
+    width: 40%;
+    margin-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#com {
+    display: flex;
+    margin: 1rem;
+    overflow: hidden;
+}
+#img {
+    width: 1rem;
+    height: 1rem;
+    background-image: url("./speech-bubble-64.png");
+    background-size: cover;
+    background-position: center;
+}

@@ -1,0 +1,17 @@
+.block {
+    box-sizing: border-box;
+    width: 90%;
+    margin: 1rem;
+    height: auto;
+    border: 1px solid black;
+    background-color: beige;
+}
+#update {
+    width: 5%;
+    height: 3rem;
+    top: 0;
+    left: 50%;
+    background-image: url("./available-updates-64.png");
+    background-position: center;
+    background-size: cover;
+}
