@@ -43,7 +43,7 @@ class News extends Component {
                     .then(res => res.json())
                     .then(res => {
                         if(res.type === "") {
-                            
+
                         }
                     })
     }
