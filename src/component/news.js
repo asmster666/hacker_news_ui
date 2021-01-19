@@ -80,13 +80,6 @@ class News extends Component {
                     </div>
                     <div id="list">
                         comments
-                        comments
-                        comments
-                        comments
-                        comments
-                        comments
-                        comments
-                        comments
                     </div>
                 </div>
             </div>

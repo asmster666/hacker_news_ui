@@ -8,7 +8,7 @@ class MainPage extends Component {
 
     state = {
         id: '',
-        score: 0,
+        score: '',
         title: '',
         url: '',
         date: '',
@@ -25,47 +25,76 @@ class MainPage extends Component {
             const {id, score, title, url, date} = this.state;
 
             let kid = document.createElement("li");
-            kid.innerHTML = `
-                id: ${id} <br/>
-                score: ${score} <br/>
-                title: ${title} <br/>
-                url: ${url} <br/>
-                date: ${this.convertTime(date)}  
+            kid.innerHTML = ` 
+                <div className="left">
+                    <div className="title">
+                        <h1>${title}</h1>
+                        <div id="link">${url}</div>
+                    </div>
+                    <div className="info">
+                        ${this.convertTime(date)} <br/>
+                        author: ${id}
+                    </div>
+                </div>
+                <div className="right">
+                    <div className="com">
+                        <div className="img"></div>
+                        ${score}
+                    </div>
+                    <div id="list">
+                        comments
+                    </div>
+                </div>
             `;
             kid.style = "list-style: none";
+            kid.classList.add("news");
             block.appendChild(kid);
+
+            this.refreshState();
         }
+    }
+
+    refreshState = () => {
+        this.setState(() => ({
+            id: '',
+            score: '',
+            title: '',
+            url: '',
+            date: '',
+            didGet: false
+        }));
     }
 
     getAllStoryURL = () => {
         const api = `https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty`;
         fetch(api)
-                    .then(res => res.json())
-                    .then(res => {
-                        res.length = 100;
-                        console.log(res.length);
-                        res.forEach(id => {
-                            const api = `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`;
-                            fetch(api)
-                                .then(res => res.json())
-                                .then(res => {
-                                        this.setState(() => ({
-                                            id: res.by,
-                                            score: res.descendants,
-                                            title: res.title,
-                                            url: res.url,
-                                            date: res.time
-                                        }))
-                                })
-                                .then(() => {
+                .then(res => res.json())
+                .then(res => {
+                    console.log("get all stories");
+                    res.length = 100;
+                    res.forEach(id => {
+                        const api = `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`;
+                        fetch(api)
+                            .then(res => res.json())
+                            .then(res => {
+                                    console.log(`get story  ${id}`);
                                     this.setState(() => ({
-                                        didGet: true
+                                        id: res.by,
+                                        score: res.descendants,
+                                        title: res.title,
+                                        url: res.url,
+                                        date: res.time
                                     }))
-                                })
-                                .catch(error => console.log(error));
+                            })
+                            .then(() => {
+                                this.setState(() => ({
+                                    didGet: true
+                                }))
+                            })
+                            .catch(error => console.log(error));
                         });
                     })
-                    .catch(error => console.log(error)); 
+                .catch(error => console.log(error)); 
     }
 
     convertTime = (unixTime) => {
@@ -80,7 +109,7 @@ class MainPage extends Component {
     render() {
         return (
             <ul className="block">
-                <button id="update" onClick={this.getAllStoryURL}></button>
+                <div id="update" onClick={this.getAllStoryURL}>get first 100 stories</div>
             </ul> 
         )
     }
