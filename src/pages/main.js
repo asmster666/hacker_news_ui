@@ -7,94 +7,142 @@ import './main.css';
 class MainPage extends Component {
 
     state = {
-        id: '',
-        score: '',
-        title: '',
-        url: '',
-        date: '',
-        didGet: false
+        wrapper: '',
+        first_array_comments: [],
+        second_array_comments: [],
+        parent: ''
     }
-    
-    componentDidUpdate() {
-        this.generateNews(this.state.didGet);
-    }
-    
-    generateNews = (trigger) => {
-        if(trigger) {
-            const block = document.querySelector(".block");
-            const {id, score, title, url, date} = this.state;
 
-            let kid = document.createElement("li");
-            kid.innerHTML = ` 
-                <div className="left">
-                    <div className="title">
-                        <h1>${title}</h1>
-                        <div id="link">${url}</div>
-                    </div>
-                    <div className="info">
-                        ${this.convertTime(date)} <br/>
-                        author: ${id}
-                    </div>
-                </div>
-                <div className="right">
-                    <div className="com">
-                        <div className="img"></div>
-                        ${score}
-                    </div>
-                    <div id="list">
-                        comments
-                    </div>
-                </div>
-            `;
-            kid.style = "list-style: none";
-            kid.classList.add("news");
-            block.appendChild(kid);
+    fetchFunction = () => {
+        // get all stories
+        const api = `https://hacker-news.firebaseio.com/v0/beststories.json?print=pretty`;
+        fetch(api)
+            .then(res => res.json())
+            .then(res => {
+                res.length = 5;
+                res.forEach(id => {
+                    const api = `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`;
+                    fetch(api)
+                        .then(res => res.json())
+                        .then(res => {
+                            // create li for each story and fill it up (function 1)
+                            const block = document.querySelector(".block");
+                            let block_li = document.createElement("li");
+                            block_li.innerHTML = `
+                                <div className="intro">
+                                    <div className="title">
+                                        <h1>${res.title}</h1>
+                                        <div id="link">${res.url}</div>
+                                    </div>
+                                    <div className="info">
+                                        ${this.convertTime(res.time)} <br/>
+                                        author: ${res.by}
+                                    </div>
+                                    <div className="com">
+                                        <div className="img"></div>
+                                        comments: ${res.descendants}
+                                    </div>
+                                </div>
+                            `;
+                            block_li.style = "list-style: none;";
+                            block_li.classList.add("newsli");
+                            block_li.setAttribute('id', `${res.id}`);
+                            block.appendChild(block_li);
 
-            this.refreshState();
-        }
+                            const parent_comment_list = document.querySelector(".list");
+                            let wrap = document.createElement("ul");
+                            wrap.classList.add("wrap");
+                            wrap.setAttribute('id', `${res.id}`);
+                            parent_comment_list.appendChild(wrap);
+                            for(let wrapper of parent_comment_list.children) {
+                                this.setState(() => ({
+                                    wrapper: wrapper
+                                }))
+                            }
+                            console.log(this.state.wrapper);
+    
+                            this.setState(() => ({
+                                first_array_comments: res.kids
+                            }))
+    
+                            // create li for each comment and fill up id (function 2)
+                            
+                                let story_parent = this.state.wrapper;
+                                const first_array = this.state.first_array_comments;
+                                first_array.forEach(parent_id => {
+                                    const api = `https://hacker-news.firebaseio.com/v0/item/${parent_id}.json?print=pretty`;
+                                    fetch(api)
+                                        .then(res => res.json())
+                                        .then(res => {
+                                                let pcl_li = document.createElement("li");
+                                                pcl_li.innerHTML = `
+                                                    <ul className="wrap_parent">
+                                                        parent_text: <p>${res.text}</p>
+                                                        parent_author: <p>${res.by}</p>
+                                                        parent_time: <p>${this.convertTime(res.time)}</p>
+                                                        <button>show more about that branch of comments</button>
+                                                    </ul>
+                                                `;
+                                                pcl_li.style = "list-style: none;";
+                                                pcl_li.setAttribute('id', `${res.id}`)
+                                                story_parent.appendChild(pcl_li);
+            
+                                                this.setState(() => ({
+                                                    second_array_comments: res.kids,
+                                                    parent: res.id
+                                                }))
+            
+                                                // create kid wrap and fill it up (function 3)
+                                                const parent = pcl_li.lastElementChild;
+                                                const second_array = this.state.second_array_comments;
+                                                if(second_array){
+                                                    second_array.forEach(kid_id => {
+                                                        const api = `https://hacker-news.firebaseio.com/v0/item/${kid_id}.json?print=pretty`;
+                                                        fetch(api)
+                                                            .then(res => res.json())
+                                                            .then(res => {
+                                                                let kid_li = document.createElement("li");
+                                                                kid_li.innerHTML = `
+                                                                    kid_text: <p>${res.text}</p>
+                                                                    kid_author: <p>${res.by}</p>
+                                                                    kid_time: <p>${this.convertTime(res.time)}</p>
+                                                                `;
+                                                                kid_li.classList.add("comment");
+                                                                parent.appendChild(kid_li);
+                                                                
+                                                            })
+                                                    })
+                                                }
+                                            
+                                        })
+        
+                                    this.refreshKids();
+                                })
+                            
+                                
+                            
+    
+                            this.refreshState();
+                        })
+                    
+                })   
+            })
+    
     }
 
     refreshState = () => {
         this.setState(() => ({
-            id: '',
-            score: '',
-            title: '',
-            url: '',
-            date: '',
-            didGet: false
-        }));
+            first_array_comments: [],
+            second_array_comments: [],
+            parent: ''
+        }))
     }
-
-    getAllStoryURL = () => {
-        const api = `https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty`;
-        fetch(api)
-                .then(res => res.json())
-                .then(res => {
-                    console.log("get all stories");
-                    res.length = 100;
-                    res.forEach(id => {
-                        const api = `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`;
-                        fetch(api)
-                            .then(res => res.json())
-                            .then(res => {
-                                    console.log(`get story  ${id}`);
-                                    this.setState(() => ({
-                                        id: res.by,
-                                        score: res.descendants,
-                                        title: res.title,
-                                        url: res.url,
-                                        date: res.time
-                                    }))
-                            })
-                            .then(() => {
-                                this.setState(() => ({
-                                    didGet: true
-                                }))
-                            })
-                            .catch(error => console.log(error));
-                        });
-                    })
-                .catch(error => console.log(error)); 
+    
+    refreshKids = () => {
+        this.setState(() => ({
+            second_array_comments: [],
+            parent: ''
+        }))
     }
 
     convertTime = (unixTime) => {
@@ -108,9 +156,13 @@ class MainPage extends Component {
 
     render() {
         return (
-            <ul className="block">
-                <div id="update" onClick={this.getAllStoryURL}>get first 100 stories</div>
-            </ul> 
+            <div className="main">
+                <div id="update" onClick={this.fetchFunction}>get first 100 stories</div>
+                <div className="wrapper">
+                    <ul className="block"></ul>
+                    <ul className="list"></ul>
+                </div>
+            </div> 
         )
     }
 }
