@@ -10,7 +10,8 @@ class MainPage extends Component {
         wrapper: '',
         first_array_comments: [],
         second_array_comments: [],
-        parent: ''
+        parent: '',
+        click_trigger: true
     }
 
     fetchFunction = () => {
@@ -50,15 +51,8 @@ class MainPage extends Component {
                             block.appendChild(block_li);
 
                             const parent_comment_list = document.querySelector(".list");
-                            let wrap = document.createElement("ul");
-                            wrap.classList.add("wrap");
-                            wrap.setAttribute('id', `${res.id}`);
-                            parent_comment_list.appendChild(wrap);
-                            for(let wrapper of parent_comment_list.children) {
-                                this.setState(() => ({
-                                    wrapper: wrapper
-                                }))
-                            }
+                            this.createParentWrapper(parent_comment_list, `${res.id}`);
+            
                             console.log(this.state.wrapper);
     
                             this.setState(() => ({
@@ -77,9 +71,11 @@ class MainPage extends Component {
                                                 let pcl_li = document.createElement("li");
                                                 pcl_li.innerHTML = `
                                                     <ul className="wrap_parent">
-                                                        parent_text: <p>${res.text}</p>
-                                                        parent_author: <p>${res.by}</p>
-                                                        parent_time: <p>${this.convertTime(res.time)}</p>
+                                                        <div id="txt">${res.text}</div>
+                                                        <div class="author_date_wrap">
+                                                            <p id="author">${res.by}</p>
+                                                            <p>${this.convertTime(res.time)}</p>
+                                                        </div>
                                                         <button>show more about that branch of comments</button>
                                                     </ul>
                                                 `;
@@ -94,33 +90,19 @@ class MainPage extends Component {
             
                                                 // create kid wrap and fill it up (function 3)
                                                 const parent = pcl_li.lastElementChild;
+                                                this.triggerClickFunction(parent);
+
                                                 const second_array = this.state.second_array_comments;
-                                                if(second_array){
-                                                    second_array.forEach(kid_id => {
-                                                        const api = `https://hacker-news.firebaseio.com/v0/item/${kid_id}.json?print=pretty`;
-                                                        fetch(api)
-                                                            .then(res => res.json())
-                                                            .then(res => {
-                                                                let kid_li = document.createElement("li");
-                                                                kid_li.innerHTML = `
-                                                                    kid_text: <p>${res.text}</p>
-                                                                    kid_author: <p>${res.by}</p>
-                                                                    kid_time: <p>${this.convertTime(res.time)}</p>
-                                                                `;
-                                                                kid_li.classList.add("comment");
-                                                                parent.appendChild(kid_li);
-                                                                
-                                                            })
-                                                    })
+
+                                                if(this.state.click_trigger) {
+                                                    this.showKidsOnClick(second_array, parent);
                                                 }
+                                                
                                             
                                         })
-        
+         
                                     this.refreshKids();
                                 })
-                            
-                                
-                            
     
                             this.refreshState();
                         })
@@ -128,6 +110,55 @@ class MainPage extends Component {
                 })   
             })
     
+    }
+
+    createParentWrapper = (list, id) => {
+        let wrap = document.createElement("ul");
+        wrap.classList.add("wrap");
+        wrap.setAttribute('id', id);
+        list.appendChild(wrap);
+        for(let wrapper of list.children) {
+            this.setState(() => ({
+                wrapper: wrapper
+            }))
+        }
+    }
+
+    triggerClickFunction = (element) => {
+        let lastKid = element.lastElementChild;
+        lastKid.addEventListener('click', () => {
+            this.setState(() => ({
+                click_trigger: true
+            }))
+        })
+    }
+
+    showKidsOnClick = (array, parent) => {
+        if(array){
+            array.forEach(kid_id => {
+                const api = `https://hacker-news.firebaseio.com/v0/item/${kid_id}.json?print=pretty`;
+                fetch(api)
+                    .then(res => res.json())
+                    .then(res => {
+                        let kid_li = document.createElement("li");
+                        kid_li.innerHTML = `
+                            <div id="kid_txt">${res.text}</div>
+                            <div class="author_date_wrap" id="kid_wrap">
+                                <p>${res.by}</p>
+                                <p>${this.convertTime(res.time)}</p>
+                            </div>
+                        `;
+                        kid_li.classList.add("comment");
+                        parent.appendChild(kid_li);
+                        
+                    })
+                    .then(() => {
+                        this.setState(() => ({
+                            click_trigger: false
+                        }))
+                    })
+            })
+        }
     }
 
     refreshState = () => {
