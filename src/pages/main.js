@@ -11,7 +11,7 @@ class MainPage extends Component {
         first_array_comments: [],
         second_array_comments: [],
         parent: '',
-        click_trigger: true
+        click_trigger: false
     }
 
     fetchFunction = () => {
@@ -52,8 +52,6 @@ class MainPage extends Component {
 
                             const parent_comment_list = document.querySelector(".list");
                             this.createParentWrapper(parent_comment_list, `${res.id}`);
-            
-                            console.log(this.state.wrapper);
     
                             this.setState(() => ({
                                 first_array_comments: res.kids
@@ -89,16 +87,24 @@ class MainPage extends Component {
                                                 }))
             
                                                 // create kid wrap and fill it up (function 3)
-                                                const parent = pcl_li.lastElementChild;
-                                                this.triggerClickFunction(parent);
+                                                const parent = pcl_li.lastElementChild; //wrap parent ul
 
-                                                const second_array = this.state.second_array_comments;
-
-                                                if(this.state.click_trigger) {
-                                                    this.showKidsOnClick(second_array, parent);
-                                                }
-                                                
+                                                let second_array = this.state.second_array_comments;
+                                                this.getKidsData(second_array, parent);
                                             
+                                        })
+                                        .then(() => {
+                                            for (let parent of story_parent.children) {
+                                                const parent_wrapper = parent.lastElementChild; // === parent
+                                                this.triggerClickFunction(parent_wrapper);
+
+                                                for (let kid of parent_wrapper.children) {
+                                                    if(this.state.click_trigger) {
+                                                        console.log("i want kids comment");
+                                                        kid.style.display = "block";
+                                                    }
+                                                }
+                                            }
                                         })
          
                                     this.refreshKids();
@@ -125,16 +131,18 @@ class MainPage extends Component {
     }
 
     triggerClickFunction = (element) => {
-        let lastKid = element.lastElementChild;
+        let lastKid = element.lastElementChild; //button show more
         lastKid.addEventListener('click', () => {
+            console.log("trigger was clicked");
             this.setState(() => ({
                 click_trigger: true
             }))
         })
     }
 
-    showKidsOnClick = (array, parent) => {
+    getKidsData = (array, parent) => {
         if(array){
+            console.log("got array");
             array.forEach(kid_id => {
                 const api = `https://hacker-news.firebaseio.com/v0/item/${kid_id}.json?print=pretty`;
                 fetch(api)
@@ -148,14 +156,9 @@ class MainPage extends Component {
                                 <p>${this.convertTime(res.time)}</p>
                             </div>
                         `;
+                        kid_li.style.display = "none";
                         kid_li.classList.add("comment");
-                        parent.appendChild(kid_li);
-                        
-                    })
-                    .then(() => {
-                        this.setState(() => ({
-                            click_trigger: false
-                        }))
+                        parent.appendChild(kid_li);    
                     })
             })
         }

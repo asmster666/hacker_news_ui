@@ -49,11 +49,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 7rem;
+    height: 10rem;
 }
 .title {
-    text-transform: uppercase;
     font-weight: bold;
+
 }
 .title h1 {
     height: 5rem;
@@ -89,13 +89,16 @@
 .wrap_parent {
     width: 90%;
     height: 10rem;
-    overflow-y: scroll;
+    overflow: auto;
+}
+.wrap::-webkit-scrollbar {
+    display: none;
 }
 .wrap {
     margin-left: -2.8rem;
     height: 30rem;
     margin-bottom: 1rem;
-    overflow-y: scroll;
+    overflow: auto;
     border-top: 2px solid green;
     border-right: 2px solid green;
     border-bottom: 2px solid green;
@@ -105,7 +108,10 @@
     height: 4rem;
     color: rgb(110, 165, 255);
     margin-top: 0.5rem;
-    overflow-y: scroll;
+    overflow: auto;
+}
+#txt::-webkit-scrollbar {
+    display: none;
 }
 .author_date_wrap {
     width: 50%;
@@ -118,14 +124,20 @@
     margin: 1rem auto;
     padding: 1rem;
     height: 4rem;
-    overflow-y: scroll; 
+    overflow: auto; 
+}
+.comment::-webkit-scrollbar {
+    display: none;
 }
 #kid_txt {
     width: 90%;
     height: 2rem;
     color: rgb(38, 204, 38); 
     margin-top: 0.5rem;
-    overflow-y: scroll;
+    overflow: auto;
+}
+#kid_txt::-webkit-scrollbar {
+    display: none;
 }
 #kid_wrap {
     margin-top: -0.5rem;
@@ -135,3 +147,81 @@
     overflow: hidden;
     height: 1.1rem;
 }
+
+/* ---------------adaptive--------------- */
+
+@media only screen and (max-width: 780px) {
+    .wrapper {
+        display: flex;
+    }
+    .block, .list {
+        width: 90%;
+    }
+    .newsli {
+        height: 16rem;
+        border-top: 2px solid green;
+        border-right: 2px solid green;
+        border-left: 2px solid green; 
+        border-bottom: 2px solid transparent;
+    }
+    .wrap {
+        height: 18rem;
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid green;
+        border-right: 2px solid green;
+        border-left: 2px solid green; 
+    }
+    .newsli {
+        margin-bottom: 19rem;
+        margin-left: 20rem;
+    }
+    .wrap {
+        width: 88%;
+        margin-top: 18rem;
+        margin-left: -20.95rem;
+        margin-bottom: 1rem;
+    }
+}
+@media only screen and (max-width: 550px) {
+    .newsli {
+        height: 16rem;
+        border-top: 2px solid green;
+        border-right: 2px solid green;
+        border-left: 2px solid green; 
+        border-bottom: 2px solid transparent;
+    }
+    .intro {
+        width: 90%;
+        margin-bottom: 1rem;
+    }
+    .wrap {
+        height: 18rem;
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid green;
+        border-right: 2px solid green;
+        border-left: 2px solid green; 
+    }
+    .wrap_parent {
+        margin-right: 3rem;
+        margin-bottom: 1rem;
+    }
+    button {
+        width: 50%;
+        margin-left: 2rem;
+    }
+    .newsli {
+        margin-bottom: 22rem;
+        margin-left: 11rem;
+    }
+    .title {
+        width: 90%;
+        height: auto;
+    }
+    .wrap {
+        width: 82.2%;
+        margin-top: 17rem;
+        margin-left: -11.6rem;
+        margin-bottom: 3.2rem;
+    }
+}
+
