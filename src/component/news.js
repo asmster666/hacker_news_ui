@@ -24,28 +24,15 @@ class News extends Component {
         await fetch(api)
                     .then(res => res.json())
                     .then(res => {
-                        if(res.type === "story"){
-                            this.setState(() => ({
-                                id: res.by,
-                                score: res.descendants,
-                                title: res.title,
-                                url: res.url,
-                                date: res.time
-                            }))
-                        }
+                        this.setState(() => ({
+                            id: res.by,
+                            score: res.descendants,
+                            title: res.title,
+                            url: res.url,
+                            date: res.time
+                        }))
                     })
                     .catch(error => console.log(error));
-    }
-
-    getComments = async() => {
-        const api = '';
-        await fetch(api)
-                    .then(res => res.json())
-                    .then(res => {
-                        if(res.type === "") {
-
-                        }
-                    })
     }
 
     convertTime = (unixTime) => {
