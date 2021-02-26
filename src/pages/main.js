@@ -90,21 +90,9 @@ class MainPage extends Component {
                                                 const parent = pcl_li.lastElementChild; //wrap parent ul
 
                                                 let second_array = this.state.second_array_comments;
-                                                this.getKidsData(second_array, parent);
-                                            
-                                        })
-                                        .then(() => {
-                                            for (let parent of story_parent.children) {
-                                                const parent_wrapper = parent.lastElementChild; // === parent
-                                                this.triggerClickFunction(parent_wrapper);
 
-                                                for (let kid of parent_wrapper.children) {
-                                                    if(this.state.click_trigger) {
-                                                        console.log("i want kids comment");
-                                                        kid.style.display = "block";
-                                                    }
-                                                }
-                                            }
+                                                this.triggerClickFunction(parent, second_array);
+                                            
                                         })
          
                                     this.refreshKids();
@@ -130,19 +118,25 @@ class MainPage extends Component {
         }
     }
 
-    triggerClickFunction = (element) => {
-        let lastKid = element.lastElementChild; //button show more
-        lastKid.addEventListener('click', () => {
-            console.log("trigger was clicked");
-            this.setState(() => ({
-                click_trigger: true
-            }))
-        })
+    triggerClickFunction = (element, array) => {
+        if(array) {
+            let lastKid = element.lastElementChild; //button show more
+            lastKid.addEventListener('click', () => {
+                console.log("trigger turn on");
+                this.setState(() => ({
+                    click_trigger: true
+                }))
+
+                if(this.state.click_trigger){
+                    console.log("show kids");
+                    this.getKidsData(array, element);
+                }
+            })
+        } 
     }
 
     getKidsData = (array, parent) => {
-        if(array){
-            console.log("got array");
+        if(array){ 
             array.forEach(kid_id => {
                 const api = `https://hacker-news.firebaseio.com/v0/item/${kid_id}.json?print=pretty`;
                 fetch(api)
@@ -156,12 +150,14 @@ class MainPage extends Component {
                                 <p>${this.convertTime(res.time)}</p>
                             </div>
                         `;
-                        kid_li.style.display = "none";
+                        //kid_li.style.display = "none";
                         kid_li.classList.add("comment");
                         parent.appendChild(kid_li);    
                     })
             })
         }
+
+        this.refreshTrigger();
     }
 
     refreshState = () => {
@@ -176,6 +172,13 @@ class MainPage extends Component {
         this.setState(() => ({
             second_array_comments: [],
             parent: ''
+        }))
+    }
+
+    refreshTrigger = () => {
+        this.setState(() => ({
+            click_trigger: false,
+            second_array_comments: []
         }))
     }
 
