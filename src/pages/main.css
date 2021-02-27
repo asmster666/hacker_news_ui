@@ -3,7 +3,7 @@
     width: 95%;
     margin: 1rem auto;
     height: auto;
-    background-color: rgb(71, 62, 45, 0.6);
+    background-color: rgb(71, 62, 45, 0.7);
     border-radius: 6px;
 }
 .wrapper {
@@ -24,7 +24,7 @@
     width: 50%;
     margin: 0 auto;
     height: 3rem;
-    background-color: rgb(71, 62, 45);
+    background-color: darkslategray;
     text-transform: uppercase;
     color: rgb(38, 204, 38);
     font-size: 32px;
@@ -42,14 +42,14 @@
     display: flex;
     justify-content: space-evenly;
     box-shadow: -0.4em -0.4em 2px rgb(38, 112, 73, 0.5);
-    border-top: 2px solid green;
-    border-left: 2px solid green;
-    border-bottom: 2px solid green;
+    border-top: 3px solid green;
+    border-left: 3px solid green;
+    border-bottom: 3px solid green;
     border-radius: 6px;
 }
 .intro {
     width: 50%;
-    margin-left: 1rem;
+    margin-left: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -59,7 +59,7 @@
     font-weight: bold;
 }
 .title h1 {
-    height: 5rem;
+    height: auto;
     width: 50%;
     color: rgb(19, 255, 58); 
     font-size: 54px;
@@ -72,12 +72,14 @@
 .info {
     margin-top: 1rem;
     font-size: 28px;
+    margin-left: 1rem;
 }
 .com {
     display: flex;
     width: 50%;
     margin: 1rem;
     font-size: 28px;
+    margin-left: 1rem;
 }
 .img {
     width: 1rem;
@@ -102,23 +104,30 @@
 .wrap::-webkit-scrollbar {
     display: none;
 }
+.btn {
+    background-color: darkslategray;
+    color: rgb(0, 255, 72);
+    height: 30px;
+    border-radius: 10px;
+}
 .wrap {
     margin-left: -2.8rem;
     height: 30rem;
     margin-bottom: 1rem;
     overflow: auto;
     box-shadow: 0.4em 0.4em 2px rgb(38, 112, 73, 0.5);
-    border-top: 2px solid green;
-    border-right: 2px solid green;
-    border-bottom: 2px solid green;
+    border-top: 3px solid green;
+    border-right: 3px solid green;
+    border-bottom: 3px solid green;
     border-radius: 6px;
 }
 #txt {
     width: 90%;
     height: 4rem;
-    color: rgb(21, 216, 151);
+    color: rgb(128, 223, 143);
     margin-top: 0.5rem;
     overflow: auto;
+    font-size: 18px;
 }
 #txt::-webkit-scrollbar {
     display: none;
@@ -141,10 +150,11 @@
 }
 #kid_txt {
     width: 90%;
-    height: 2rem;
-    color: rgb(38, 204, 38); 
+    height: 3rem;
+    color: rgb(0, 255, 213); 
     margin-top: 0.5rem;
     overflow: auto;
+    font-size: 18px;
 }
 #kid_txt::-webkit-scrollbar {
     display: none;

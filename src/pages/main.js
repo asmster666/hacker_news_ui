@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {unmountComponentAtNode} from 'react-dom';
 import News from '../component/news';
 import {withRouter} from 'react-router-dom';
 
@@ -74,7 +75,7 @@ class MainPage extends Component {
                                                             <p id="author">${res.by}</p>
                                                             <p>${this.convertTime(res.time)}</p>
                                                         </div>
-                                                        <button>show more about that branch of comments</button>
+                                                        <button class="btn">show more</button>
                                                     </ul>
                                                 `;
                                                 pcl_li.style = "list-style: none;";
@@ -189,6 +190,11 @@ class MainPage extends Component {
 
         return time;
 
+    }
+
+    unmountFunction = () => {
+        let wrap = document.querySelector(".wrapper");
+        unmountComponentAtNode(wrap);
     }
 
     render() {
