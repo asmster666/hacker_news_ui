@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import './news.css';
 
@@ -14,11 +15,12 @@ class News extends Component {
     }
 
     componentDidMount() {
-        this.changeStory("8863");
+        this.changeStory();
     }
 
-    changeStory = async (id) => {
-        const api = `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`;
+    changeStory = () => {
+        const {match: {params}} = this.props;
+        const api = `https://hacker-news.firebaseio.com/v0/item/${params.newsId}.json?print=pretty`;
                     fetch(api)
                         .then(res => res.json())
                         .then(res => {
@@ -185,6 +187,7 @@ class News extends Component {
     }
 
     render() {
+
         return (
             <div className="news">
                 <div className="wrapper">
@@ -196,4 +199,10 @@ class News extends Component {
     }
 }
 
-export default withRouter(News);
+const mapStateToProps = (state) => {
+    return {
+        id: state.id
+    }
+};
+
+export default withRouter(connect(mapStateToProps, null)(News));

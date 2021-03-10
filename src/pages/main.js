@@ -1,19 +1,12 @@
 import React, {Component} from 'react';
 import {unmountComponentAtNode} from 'react-dom';
-import News from '../component/news';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import * as actions from '../actions';
 
 import './main.css';
 
 class MainPage extends Component {
-
-    state = {
-        wrapper: '',
-        first_array_comments: [],
-        second_array_comments: [],
-        parent: '',
-        click_trigger: false
-    }
 
     fetchFunction = () => {
         // get all stories
@@ -29,12 +22,21 @@ class MainPage extends Component {
                         .then(res => {
                             const news = document.querySelector(".news_item");
                             let item = document.createElement("div");
+
+                            item.addEventListener('click', () => {
+                                let data = res.id;
+                                this.props.get_news_data(data);
+                            })
+
+                            const {match: {params}} = this.props;
                             item.innerHTML = `
-                                <h1>${res.title}</h1>
-                                <div className="info">
-                                    ${this.convertTime(res.time)} <br/>
-                                    author: ${res.by}
-                                </div>
+                                <Link to={/${params.newsId}}>
+                                    <h1>${res.title}</h1>
+                                    <div className="info">
+                                        ${this.convertTime(res.time)} <br/>
+                                        author: ${res.by}
+                                    </div>
+                                </Link>
                             `;
                             item.classList.add("item");
                             news.appendChild(item);
@@ -71,4 +73,10 @@ class MainPage extends Component {
     }
 }
 
-export default withRouter(MainPage);
+const mapStateToProps = (state) => {
+    return {
+        id: state.id
+    }
+};
+
+export default withRouter(connect(mapStateToProps, actions)(MainPage));
