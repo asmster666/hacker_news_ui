@@ -4,7 +4,7 @@
     margin: 1rem auto;
     height: auto;
     background-color: rgb(71, 62, 45, 0.7);
-    border-radius: 6px;
+    border-radius: 15px;
 }
 .wrapper {
     display: flex; 
