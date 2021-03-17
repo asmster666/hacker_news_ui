@@ -22,23 +22,26 @@ class MainPage extends Component {
                         .then(res => {
                             const news = document.querySelector(".news_item");
                             let item = document.createElement("div");
+                            this.props.match.params.id = res.id;
 
-                            item.addEventListener('click', () => {
-                                let data = res.id;
-                                this.props.get_news_data(data);
-                            })
-
-                            const {match: {params}} = this.props;
                             item.innerHTML = `
-                                <Link to={/${params.newsId}}>
+                                <a style="text-decoration: none; color: black;" href='/${res.id}'>
                                     <h1>${res.title}</h1>
                                     <div className="info">
                                         ${this.convertTime(res.time)} <br/>
                                         author: ${res.by}
                                     </div>
-                                </Link>
+                                </a>
                             `;
                             item.classList.add("item");
+
+                            item.addEventListener('click', () => {
+                                let data = res.id;
+                                this.props.get_news_data(data);
+
+                                this.props.history.push(`/${data}`);
+                            })
+
                             news.appendChild(item);
                         })
                     

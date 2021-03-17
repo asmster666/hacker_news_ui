@@ -19,8 +19,8 @@ class News extends Component {
     }
 
     changeStory = () => {
-        const {match: {params}} = this.props;
-        const api = `https://hacker-news.firebaseio.com/v0/item/${params.newsId}.json?print=pretty`;
+        const {id} = this.props.match.params;
+        const api = `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`;
                     fetch(api)
                         .then(res => res.json())
                         .then(res => {
