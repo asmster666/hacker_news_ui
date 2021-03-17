@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
-import {connect} from 'react-redux';
 
 import './news.css';
 
@@ -199,10 +198,4 @@ class News extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        id: state.id
-    }
-};
-
-export default withRouter(connect(mapStateToProps, null)(News));
+export default withRouter(News);

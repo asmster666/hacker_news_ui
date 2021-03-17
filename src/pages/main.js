@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {unmountComponentAtNode} from 'react-dom';
-import {withRouter, Link} from 'react-router-dom';
-import {connect} from 'react-redux';
-import * as actions from '../actions';
+import {withRouter} from 'react-router-dom';
 
 import './main.css';
 
@@ -37,7 +35,6 @@ class MainPage extends Component {
 
                             item.addEventListener('click', () => {
                                 let data = res.id;
-                                this.props.get_news_data(data);
 
                                 this.props.history.push(`/${data}`);
                             })
@@ -76,10 +73,4 @@ class MainPage extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        id: state.id
-    }
-};
-
-export default withRouter(connect(mapStateToProps, actions)(MainPage));
+export default withRouter(MainPage);

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import MainPage from '../pages';
 import News from '../component';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {connect} from 'react-redux';
 class App extends Component {
     render() {
         return (
@@ -14,10 +13,4 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        id: state.id
-    }
-};
-
-export default connect(mapStateToProps, null)(App);
+export default App;
