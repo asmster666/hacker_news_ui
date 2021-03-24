@@ -138,7 +138,7 @@ class News extends Component {
                     .then(res => {
                         let kid_li = document.createElement("li");
                         kid_li.innerHTML = `
-                            <div id="kid_txt">${res.text}</div>
+                            <div id="kid_txt">${this.cutLongComments(res.text)}</div>
                             <div class="author_date_wrap" id="kid_wrap">
                                 <p>${res.by}</p>
                                 <p>${this.convertTime(res.time)}</p>
@@ -146,6 +146,9 @@ class News extends Component {
                         `;
                         //kid_li.style.display = "none";
                         kid_li.classList.add("comment");
+                        kid_li.addEventListener('click', () => {
+                            document.getElementById("kid_txt").innerHTML = `${res.text}`;
+                        })
                         parent.appendChild(kid_li);    
                     })
             })
@@ -183,6 +186,15 @@ class News extends Component {
 
         return time;
 
+    }
+
+    cutLongComments = (text) => {
+        if(text !== undefined) {
+            if(text.length > 40) {
+                let result = text.substring(0, 40);
+                return result + '...';
+            }
+        }
     }
 
     render() {

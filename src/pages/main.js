@@ -47,8 +47,6 @@ class MainPage extends Component {
     
     }
 
-    
-
     convertTime = (unixTime) => {
         let data = new Date(unixTime * 1000);
         let utcString = data.toUTCString();
@@ -58,15 +56,20 @@ class MainPage extends Component {
 
     }
 
-    unmountFunction = () => {
-        let wrap = document.querySelector(".wrapper");
-        unmountComponentAtNode(wrap);
+    rerenderFunction() {
+        let wrapper = document.querySelector(".news_item");
+        wrapper.style = "display: none;";
+        if(wrapper.style.display === "none") {
+            window.location.reload();
+            wrapper.style = "display: block;";
+        }
+        console.log("timeout worked");
     }
 
     render() {
         return (
-            <div className="main">
-                <div id="update" onClick={this.fetchFunction}>get first 100 stories</div>
+            <div className="main" onLoad={this.fetchFunction()}>
+                <div id="update" onClick={() => this.rerenderFunction()}>update first 100 stories</div>
                 <div className="news_item"></div>
             </div> 
         )
