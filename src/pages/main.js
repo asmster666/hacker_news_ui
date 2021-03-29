@@ -6,6 +6,20 @@ import './main.css';
 
 class MainPage extends Component {
 
+    rerenderFunction = () => {
+        let wrapper = document.querySelector(".news_item");
+        wrapper.style = "display: none;";
+        if(wrapper.style.display === "none") {
+            setInterval(() => {
+                window.location.reload(true);
+                this.fetchFunction();
+                wrapper.style = "display: block;";
+            }, 100);
+            clearInterval();
+        } 
+        console.log("timeout worked");
+    }
+
     fetchFunction = () => {
         // get all stories
         const api = `https://hacker-news.firebaseio.com/v0/beststories.json?print=pretty`;
@@ -56,20 +70,10 @@ class MainPage extends Component {
 
     }
 
-    rerenderFunction() {
-        let wrapper = document.querySelector(".news_item");
-        wrapper.style = "display: none;";
-        if(wrapper.style.display === "none") {
-            window.location.reload();
-            wrapper.style = "display: block;";
-        }
-        console.log("timeout worked");
-    }
-
     render() {
         return (
-            <div className="main" onLoad={this.fetchFunction()}>
-                <div id="update" onClick={() => this.rerenderFunction()}>update first 100 stories</div>
+            <div className="main">
+                <div id="update" onClick={this.fetchFunction}>update first 100 stories</div>
                 <div className="news_item"></div>
             </div> 
         )

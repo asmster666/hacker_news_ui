@@ -1,5 +1,6 @@
 {
   "name": "test_task",
+  "homepage": "http://colfarrel2.temp.swtest.ru",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
